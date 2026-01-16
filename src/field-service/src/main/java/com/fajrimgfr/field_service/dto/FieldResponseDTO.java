@@ -1,25 +1,19 @@
-package com.fajrimgfr.field_service.entity;
+package com.fajrimgfr.field_service.dto;
 
 import java.util.UUID;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
-@Table(name = "field")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Field {
-    @Id
-    @GeneratedValue
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class FieldResponseDTO {
     private UUID id;
-
     private String fieldName;
     private int countBall;
     private int sizeFieldLong;
