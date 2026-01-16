@@ -11,6 +11,7 @@ public class ValueMapper {
     public static FieldResponseDTO fieldToDTO(Field field) {
         FieldResponseDTO fieldResponseDTO = new FieldResponseDTO();
         fieldResponseDTO.setId(field.getId());
+        fieldResponseDTO.setFieldName(field.getFieldName());
         fieldResponseDTO.setCountBall(field.getCountBall());
         fieldResponseDTO.setSizeFieldLong(field.getSizeFieldLong());
         fieldResponseDTO.setSizeFieldWide(field.getSizeFieldWide());
@@ -21,15 +22,15 @@ public class ValueMapper {
         return fieldResponseDTO;
     }
 
-    public static Field DTOToField(FieldRequestDTO DTO) {
+    public static Field DTOToField(FieldRequestDTO fieldRequestDTO) {
         Field field = new Field();
-        field.setId(field.getId());
-        field.setCountBall(field.getCountBall());
-        field.setSizeFieldLong(field.getSizeFieldLong());
-        field.setSizeFieldWide(field.getSizeFieldWide());
-        field.setPriceFieldOnWeekend(field.getPriceFieldOnWeekend());
-        field.setPriceFieldOnWeekday(field.getPriceFieldOnWeekday());
-        field.setImageUrl(field.getImageUrl());
+        field.setFieldName(fieldRequestDTO.getFieldName());
+        field.setCountBall(fieldRequestDTO.getCountBall());
+        field.setSizeFieldLong(fieldRequestDTO.getSizeFieldLong());
+        field.setSizeFieldWide(fieldRequestDTO.getSizeFieldWide());
+        field.setPriceFieldOnWeekend(fieldRequestDTO.getPriceFieldOnWeekend());
+        field.setPriceFieldOnWeekday(fieldRequestDTO.getPriceFieldOnWeekday());
+        field.setImageUrl(fieldRequestDTO.getImageUrl());
 
         return field;
     }
