@@ -1,10 +1,10 @@
-package com.fajrimgfr.field_service;
+package com.fajrimgfr.reservation_service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class FieldServiceApplicationTests {
+class ReservationServiceApplicationTests {
 
 	@Test
 	void contextLoads() {
