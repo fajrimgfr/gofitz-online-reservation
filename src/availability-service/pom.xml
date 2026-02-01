@@ -9,9 +9,9 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.fajrimgfr</groupId>
-	<artifactId>reservation-service</artifactId>
+	<artifactId>availability-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>reservation-service</name>
+	<name>availability-service</name>
 	<description>availability-service</description>
 	<url/>
 	<licenses>
@@ -53,11 +53,6 @@
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-redis</artifactId>
-		</dependency>
-
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa-test</artifactId>

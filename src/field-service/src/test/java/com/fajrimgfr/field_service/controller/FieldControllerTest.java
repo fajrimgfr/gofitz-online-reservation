@@ -1,58 +1,39 @@
-// package com.javatechie;
+package com.fajrimgfr.field_service.controller;
 
-// import com.javatechie.controller.ProductController;
-// import com.javatechie.dto.ProductResponseDTO;
-// import com.javatechie.entity.Product;
-// import com.javatechie.repository.ProductRepository;
-// import com.javatechie.service.ProductService;
-// import com.javatechie.util.ValueMapper;
-// import org.junit.Before;
-// import org.junit.jupiter.api.Test;
-// import org.junit.runner.RunWith;
-// import org.mockito.InjectMocks;
-// import org.mockito.Mock;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-// import org.springframework.boot.test.context.SpringBootTest;
-// import org.springframework.boot.test.mock.mockito.MockBean;
-// import org.springframework.http.MediaType;
-// import org.springframework.test.context.junit4.SpringRunner;
-// import org.springframework.test.web.servlet.MockMvc;
-// import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-// import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-// import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureWebMvc;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-// import java.util.Arrays;
-// import java.util.Objects;
+import com.fajrimgfr.field_service.service.FieldService;
 
-// import static org.mockito.ArgumentMatchers.any;
-// import static org.mockito.Mockito.when;
-// import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-// import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+@SpringBootTest
+@AutoConfigureWebMvc
+public class FieldControllerTest {
+    private static final String ENDPOINT_URL = "/field";
 
-// @SpringBootTest
-// @AutoConfigureMockMvc
-// @RunWith(SpringRunner.class)
-// class ProductServiceApplicationTests {
+    @InjectMocks
+    private FieldController fieldController;
 
-//     private static final String ENDPOINT_URL = "/products";
+    @MockitoBean
+    private FieldService fieldService;
 
-//     @InjectMocks
-//     private ProductController productController;
+    @Autowired
+    private MockMvc mockMvc;
+
+    @Before
+    public void setup() {
+        this.mockMvc = MockMvcBuilders.standaloneSetup(this.fieldController).build();
+    }
+
+    // @Test
 
 
-//     @MockBean
-//     private ProductRepository productRepository;
-
-//     @Autowired
-//     private MockMvc mockMvc;
-
-//     @Before
-//     public void setup() {
-//         this.mockMvc = MockMvcBuilders.standaloneSetup(this.productController).build();
-//     }
-
-//     @Test
 //     public void createNewProductTest() throws Exception {
 //         Product demoProduct = new Product(1, "demo", "desc", "type",1,1000,"SUP","SUP01");
 //         when(productRepository.save(any())).thenReturn(demoProduct);
@@ -79,6 +60,4 @@
 //                 .andExpect(MockMvcResultMatchers.jsonPath("$.*").exists())
 //                 .andExpect(MockMvcResultMatchers.jsonPath("$.results[0].id").value(1));
 //     }
-
-
-// }
+}
