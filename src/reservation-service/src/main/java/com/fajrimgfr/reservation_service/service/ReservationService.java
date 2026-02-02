@@ -1,6 +1,10 @@
 package com.fajrimgfr.reservation_service.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -37,10 +41,10 @@ public class ReservationService {
             } else {
                 reservationResponseDTO = reservations.stream().map(ValueMapper::reservationToDTO).toList();
             }
-            log.debug("ReservationService:getReservations retrieving field from database  {}", ValueMapper.jsonAsString(reservationResponseDTO));
+            log.debug("ReservationService:getReservations retrieving reservation from database  {}", ValueMapper.jsonAsString(reservationResponseDTO));
         } catch (Exception e) {
             log.error("Exception occurred while retrieving reservations from database, Exception message {}", e.getMessage());
-            throw new ReservationServiceBusinessException("Exception occurred while fetch all fields from Database");
+            throw new ReservationServiceBusinessException("Exception occurred while fetch all reservations from Database");
         }
 
         log.info("ReservationService:getReservations execution ended.");
@@ -138,13 +142,57 @@ public class ReservationService {
         return response;
     }
 
+    public List<ReservationResponse> getFieldReservationOnSpecificDate(UUID fieldId, LocalDate date) {
+        List<ReservationResponse> responses = null;
+        log.info("ReservationService:getFieldReservationOnSpecificDate execution started");
 
+        try {
+            log.debug("ReservationService:getFieldReservationOnSpecificDate request FieldID {} and date {}.", fieldId.toString(), date);
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = start.plusDays(1).minusNanos(1);
+            List<Reservation> reservations = reservationRepository.findByFieldIdAndStartAtBetween(fieldId, start, end);
 
-    public Map<UUID ,ReservationResponse> getAllReservationOnSpecificDate(UUID id) {
-        Map<UUID ,ReservationResponse> responses = null;
+            if (reservations.isEmpty()) {
+                responses = Collections.emptyList();
+            } else {
+                responses = reservations.stream().map(ValueMapper::reservationToDTO).toList();
+            }
+            log.debug("ReservationService:getFieldReservationOnSpecificDate retrieving reservation from database  {}", ValueMapper.jsonAsString(responses));
+        } catch (Exception e) {
+            log.error("Exception occurred while retrieving reservations on specific date and field from database, Exception message {}", e.getMessage());
+            throw new ReservationServiceBusinessException("Exception occurred while fetch specific reservations from Database");
+        }
 
+        log.info("ReservationService:getFieldReservationOnSpecificDate execution ended.");
+        return responses;
+    }
 
+    public Map<UUID ,List<ReservationResponse>> getAllReservationOnSpecificDate(LocalDate date) {
+        Map<UUID ,List<ReservationResponse>> responses = null;
+        log.info("ReservationService:getAllReservationOnSpecificDate execution started");
 
+        try {
+            log.debug("ReservationService:getAllReservationOnSpecificDate request date {}.", date);
+            LocalDateTime start = date.atStartOfDay();
+            LocalDateTime end = start.plusDays(1).minusNanos(1);
+            List<Reservation> reservations = reservationRepository.findByStartAtBetween(start, end);
+            if (reservations.isEmpty()) {
+                responses = Collections.emptyMap();
+            } else {
+                responses = new HashMap<>();
+                List<ReservationResponse> reservationsDTO = reservations.stream().map(ValueMapper::reservationToDTO).toList();
+                for (ReservationResponse reservation : reservationsDTO) {
+                    responses.putIfAbsent(reservation.getFieldId(), new ArrayList<>());
+                    responses.get(reservation.getFieldId()).add(reservation);
+                }
+            }
+            log.debug("ReservationService:getAllReservationOnSpecificDate retrieving reservation from database  {}", ValueMapper.jsonAsString(responses));
+        } catch (Exception e) {
+            log.error("Exception occurred while retrieving reservations on specific date from database, Exception message {}", e.getMessage());
+            throw new ReservationServiceBusinessException("Exception occurred while fetch specific reservations from Database");
+        }
+
+        log.info("ReservationService:getAllReservationOnSpecificDate execution ended.");
         return responses;
     }
 }

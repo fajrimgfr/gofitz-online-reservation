@@ -1,0 +1,71 @@
+version: "3.9"
+services:
+  user-service:
+    build:
+      context: ../src/user-service
+      dockerfile: Dockerfile
+      target: dev
+    environment:
+      - PORT=8080
+      - CONTEXT_TIMEOUT=2
+      - HOST=user-service
+      - ACCESS_TOKEN_EXPIRY_HOUR=2
+      - REFRESH_TOKEN_EXPIRY_HOUR=168
+      - DB_URL=postgres://postgres:password@db-user-service:5432/user?sslmode=disable
+      - ACCESS_TOKEN_SECRET=access_token_secret
+      - REFRESH_TOKEN_SECRET=refresh_token_secret
+      - GOOGLE_CLIENT_ID=your-google-client-id
+      - GOOGLE_CLIENT_SECRET=your-google-client-secret
+    ports:
+      - "8080:8080"
+    depends_on:
+      db-user-service:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "/healthcheck"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  db-user-service:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=user
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-user-service-data:/var/lib/postgresql/data
+      - ../src/user-service/migrations/000001_init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  db-product-service:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=product
+    ports:
+      - "5433:5432"
+    volumes:
+      - db-product-service-data:/var/lib/postgresql/data
+      - ../src/product-service/migrations/000001_init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # redis-product-service:
+  #   image: redis
+  #   ports:
+
+
+volumes:
+  db-user-service-data:
+  db-product-service-data:
